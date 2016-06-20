@@ -29,7 +29,7 @@ namespace SudokuChallenge
 
         private void cmbBxPuzzles_SelectedIndexChanged(object sender, EventArgs e)
         {            
-            selectPuzzle();
+            SelectPuzzle();
         }
 
         private void btnSolve_Click(object sender, EventArgs e)
@@ -37,17 +37,17 @@ namespace SudokuChallenge
             // Set cursor as hourglass
             Cursor.Current = Cursors.WaitCursor;
 
-            if (Helper.solvePuzzle(puzzle, 0, 0))
+            if (Solver.SolvePuzzle(puzzle, 0, 0))
             {
-                displayPuzzle(puzzle);
+                DisplayPuzzle(puzzle);
 
-                if (Helper.verifySolution(puzzle))
+                if (Verification.VerifySolution(puzzle))
                 {
-                    Helper.writeSudokuSolutionFile(puzzle);
+                    Helper.WriteSudokuSolutionFile(puzzle);
                 }
                 else
                 {
-                    MessageBox.Show("The solution failed validation. The puzzle was not solved.", "Soduko Challenge",
+                    MessageBox.Show("The solution failed validation. The puzzle was not solved.", "sudoku Challenge",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
@@ -58,41 +58,41 @@ namespace SudokuChallenge
 
         #endregion Events
 
-        #region Static Variables
+        #region Static Fields
         
         private static int[,] puzzle;
 
-        #endregion Variables
+        #endregion Static Fields
 
         #region Methods
 
-        private void selectPuzzle()
+        private void SelectPuzzle()
         {
             try
             {
-                clearPuzzle();
+                ClearPuzzle();
 
                 string fileName = cmbBxPuzzles.SelectedItem.ToString().ToLower().Replace(" ", string.Empty) + ".txt";
 
                 if (!File.Exists(System.Windows.Forms.Application.StartupPath + "\\Puzzles\\" + fileName))
                 {
-                    MessageBox.Show(cmbBxPuzzles.SelectedItem.ToString() + " was not found. Please select another puzzle.", "Soduko Challenge",
+                    MessageBox.Show(cmbBxPuzzles.SelectedItem.ToString() + " was not found. Please select another puzzle.", "sudoku Challenge",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
 
-                puzzle = Helper.loadPuzzleFromFile(fileName);
+                puzzle = Helper.LoadPuzzleFromFile(fileName);
 
-                displayPuzzle(puzzle);
+                DisplayPuzzle(puzzle);
 
                 btnSolve.Enabled = true;               
             }
-            catch (Exception ex)
+            catch
             {
-                throw ex;
+                throw;
             }
         }
 
-        private void displayPuzzle(int[,] puzzle)
+        private void DisplayPuzzle(int[,] puzzle)
         {
             try
             {
@@ -105,18 +105,18 @@ namespace SudokuChallenge
 
                         if (value != "0")
                         {
-                            setTileValue(location, value);
+                            SetTileValue(location, value);
                         }
                     }
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                throw ex;
+                throw;
             }
         }
 
-        private void clearPuzzle()
+        private void ClearPuzzle()
         {
             try
             {
@@ -125,17 +125,17 @@ namespace SudokuChallenge
                     for (int j = 0; j < 9; j++)
                     {
                         string location = i.ToString() + j.ToString();
-                        setTileValue(location, string.Empty);
+                        SetTileValue(location, string.Empty);
                     }
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                throw ex;
+                throw;
             }
         }
 
-        private void setTileValue(string location, string tileValue)
+        private void SetTileValue(string location, string tileValue)
         {
             try
             {
@@ -249,9 +249,9 @@ namespace SudokuChallenge
                 }
 
             }
-            catch (Exception ex)
+            catch
             {
-                throw ex;
+                throw;
             }
         }
 
